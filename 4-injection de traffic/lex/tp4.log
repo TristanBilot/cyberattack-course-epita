@@ -1,0 +1,533 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.6.22)  15 JUN 2021 20:08
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**tp4.tex
+(./tp4.tex
+LaTeX2e <2020-02-02> patch level 5
+L3 programming layer <2020-03-06>
+(/usr/local/texlive/2020/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
+(/usr/local/texlive/2020/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
+)
+\c@part=\count167
+\c@section=\count168
+\c@subsection=\count169
+\c@subsubsection=\count170
+\c@paragraph=\count171
+\c@subparagraph=\count172
+\c@figure=\count173
+\c@table=\count174
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen134
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+(/usr/local/texlive/2020/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/local/texlive/2020/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count175
+\Gm@cntv=\count176
+\c@Gm@tempcnt=\count177
+\Gm@bindingoffset=\dimen135
+\Gm@wd@mp=\dimen136
+\Gm@odd@mp=\dimen137
+\Gm@even@mp=\dimen138
+\Gm@layoutwidth=\dimen139
+\Gm@layoutheight=\dimen140
+\Gm@layouthoffset=\dimen141
+\Gm@layoutvoffset=\dimen142
+\Gm@dimlist=\toks16
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen143
+\Gin@req@width=\dimen144
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2019/12/09 v1.8y multicolumn formatting (FMi)
+\c@tracingmulticols=\count178
+\mult@box=\box45
+\multicol@leftmargin=\dimen145
+\c@unbalance=\count179
+\c@collectmore=\count180
+\doublecol@number=\count181
+\multicoltolerance=\count182
+\multicolpretolerance=\count183
+\full@width=\dimen146
+\page@free=\dimen147
+\premulticols=\dimen148
+\postmulticols=\dimen149
+\multicolsep=\skip49
+\multicolbaselineskip=\skip50
+\partial@page=\box46
+\last@line=\box47
+\maxbalancingoverflow=\dimen150
+\mult@rightbox=\box48
+\mult@grightbox=\box49
+\mult@gfirstbox=\box50
+\mult@firstbox=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
+\@tempa=\box55
+\@tempa=\box56
+\@tempa=\box57
+\@tempa=\box58
+\@tempa=\box59
+\@tempa=\box60
+\@tempa=\box61
+\@tempa=\box62
+\@tempa=\box63
+\@tempa=\box64
+\@tempa=\box65
+\@tempa=\box66
+\@tempa=\box67
+\@tempa=\box68
+\@tempa=\box69
+\@tempa=\box70
+\@tempa=\box71
+\@tempa=\box72
+\@tempa=\box73
+\@tempa=\box74
+\@tempa=\box75
+\@tempa=\box76
+\@tempa=\box77
+\@tempa=\box78
+\@tempa=\box79
+\@tempa=\box80
+\@tempa=\box81
+\@tempa=\box82
+\@tempa=\box83
+\@tempa=\box84
+\@tempa=\box85
+\@tempa=\box86
+\@tempa=\box87
+\@tempa=\box88
+\c@minrows=\count184
+\c@columnbadness=\count185
+\c@finalcolumnbadness=\count186
+\last@try=\dimen151
+\multicolovershoot=\dimen152
+\multicolundershoot=\dimen153
+\mult@nat@firstbox=\box89
+\colbreak@box=\box90
+\mc@col@check@num=\count187
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/lipsum/lipsum.sty
+(/usr/local/texlive/2020/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2020-03-06 L3 programming layer (loader) 
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
+File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
+\l__kernel_color_stack_int=\count188
+\l__pdf_internal_box=\box91
+)) (/usr/local/texlive/2020/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2020-03-06 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count189
+\g__xparse_grabber_int=\count190
+\l__xparse_m_args_int=\count191
+\l__xparse_v_nesting_int=\count192
+)
+Package: lipsum 2019/01/02 v2.2 150 paragraphs of Lorem Ipsum dummy text
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex
+File: lipsum.ltd.tex 2019/01/02 v2.2 The Lorem ipsum dummy text
+))
+(/usr/local/texlive/2020/texmf-dist/tex/latex/mwe/mwe.sty
+Package: mwe 2018/03/30 v0.5 Package to support minimal working examples (MWE)
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/blindtext/blindtext.sty
+Package: blindtext 2012/01/06 V2.0 blindtext-Package
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
+\c@blindtext=\count193
+\c@Blindtext=\count194
+\c@blind@countparstart=\count195
+\blind@countxx=\count196
+\blindtext@numBlindtext=\count197
+\blind@countyy=\count198
+\c@blindlist=\count199
+\c@blindlistlevel=\count266
+\c@blindlist@level=\count267
+\blind@listitem=\count268
+\c@blind@listcount=\count269
+\c@blind@levelcount=\count270
+\blind@mathformula=\count271
+\blind@Mathformula=\count272
+\c@blind@randomcount=\count273
+\c@blind@randommax=\count274
+\c@blind@pangramcount=\count275
+\c@blind@pangrammax=\count276
+))
+(/usr/local/texlive/2020/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count277
+\float@exts=\toks17
+\float@box=\box92
+\@float@everytoks=\toks18
+\@floatcapt=\box93
+) (./tp4.aux)
+\openout1 = `tp4.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(42.67912pt, 528.93675pt, 42.67912pt)
+* v-part:(T,H,B)=(28.45274pt, 671.11987pt, 95.39737pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=528.93675pt
+* \textheight=671.11987pt
+* \oddsidemargin=-29.59087pt
+* \evensidemargin=-29.59087pt
+* \topmargin=-80.81725pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=44.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count278
+\scratchdimen=\dimen154
+\scratchbox=\box94
+\nofMPsegments=\count279
+\nofMParguments=\count280
+\everyMPshowfont=\toks19
+\MPscratchCnt=\count281
+\MPscratchDim=\dimen155
+\MPnumerator=\count282
+\makeMPintoPDFobject=\count283
+\everyMPtoPDFconversion=\toks20
+) (/usr/local/texlive/2020/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <14.4> on input line 14.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 14.
+
+[1
+
+{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<1.png, id=12, 271.0125pt x 18.0675pt>
+File: 1.png Graphic file (type png)
+<use 1.png>
+Package pdftex.def Info: 1.png  used on input line 39.
+(pdftex.def)             Requested size: 189.70744pt x 12.64714pt.
+<2.png, id=14, 452.69125pt x 192.72pt>
+File: 2.png Graphic file (type png)
+<use 2.png>
+Package pdftex.def Info: 2.png  used on input line 50.
+(pdftex.def)             Requested size: 316.88171pt x 134.90306pt.
+<3.png, id=15, 453.695pt x 37.13875pt>
+File: 3.png Graphic file (type png)
+<use 3.png>
+Package pdftex.def Info: 3.png  used on input line 56.
+(pdftex.def)             Requested size: 317.58434pt x 25.99693pt.
+<4.png, id=16, 135.50626pt x 46.1725pt>
+File: 4.png Graphic file (type png)
+<use 4.png>
+Package pdftex.def Info: 4.png  used on input line 61.
+(pdftex.def)             Requested size: 94.85371pt x 32.32051pt.
+<5.png, id=17, 379.4175pt x 160.6pt>
+File: 5.png Graphic file (type png)
+<use 5.png>
+Package pdftex.def Info: 5.png  used on input line 66.
+(pdftex.def)             Requested size: 265.59042pt x 112.41922pt.
+
+[2 <./1.png> <./2.png> <./3.png>]
+<6.png, id=24, 453.695pt x 99.37125pt>
+File: 6.png Graphic file (type png)
+<use 6.png>
+Package pdftex.def Info: 6.png  used on input line 71.
+(pdftex.def)             Requested size: 317.58434pt x 69.55939pt.
+<7.png, id=25, 371.3875pt x 29.10875pt>
+File: 7.png Graphic file (type png)
+<use 7.png>
+Package pdftex.def Info: 7.png  used on input line 76.
+(pdftex.def)             Requested size: 259.96947pt x 20.37598pt.
+<8.png, id=26, 332.24126pt x 30.1125pt>
+File: 8.png Graphic file (type png)
+<use 8.png>
+Package pdftex.def Info: 8.png  used on input line 85.
+(pdftex.def)             Requested size: 232.56728pt x 21.07858pt.
+<9.png, id=27, 453.695pt x 15.05624pt>
+File: 9.png Graphic file (type png)
+<use 9.png>
+Package pdftex.def Info: 9.png  used on input line 91.
+(pdftex.def)             Requested size: 317.58434pt x 10.53929pt.
+<10.png, id=28, 453.695pt x 17.06375pt>
+File: 10.png Graphic file (type png)
+<use 10.png>
+Package pdftex.def Info: 10.png  used on input line 96.
+(pdftex.def)             Requested size: 317.58434pt x 11.94452pt.
+<11.png, id=29, 343.2825pt x 28.105pt>
+File: 11.png Graphic file (type png)
+<use 11.png>
+Package pdftex.def Info: 11.png  used on input line 103.
+(pdftex.def)             Requested size: 240.2961pt x 19.67336pt.
+<12.png, id=30, 453.695pt x 22.0825pt>
+File: 12.png Graphic file (type png)
+<use 12.png>
+Package pdftex.def Info: 12.png  used on input line 109.
+(pdftex.def)             Requested size: 317.58434pt x 15.45763pt.
+ [3 <./4.png> <./5.png> <./6.png> <./7.png> <./8.png> <./9.png> <./10.png>]
+<13.png, id=41, 453.695pt x 18.0675pt>
+File: 13.png Graphic file (type png)
+<use 13.png>
+Package pdftex.def Info: 13.png  used on input line 114.
+(pdftex.def)             Requested size: 317.58434pt x 12.64714pt.
+<14.png, id=42, 343.2825pt x 32.12pt>
+File: 14.png Graphic file (type png)
+<use 14.png>
+Package pdftex.def Info: 14.png  used on input line 121.
+(pdftex.def)             Requested size: 240.2961pt x 22.48383pt.
+<15.png, id=43, 453.695pt x 16.06pt>
+File: 15.png Graphic file (type png)
+<use 15.png>
+Package pdftex.def Info: 15.png  used on input line 127.
+(pdftex.def)             Requested size: 317.58434pt x 11.24191pt.
+<16.png, id=44, 453.695pt x 27.10126pt>
+File: 16.png Graphic file (type png)
+<use 16.png>
+Package pdftex.def Info: 16.png  used on input line 132.
+(pdftex.def)             Requested size: 317.58434pt x 18.97073pt.
+<17.png, id=45, 264.99pt x 28.105pt>
+File: 17.png Graphic file (type png)
+<use 17.png>
+Package pdftex.def Info: 17.png  used on input line 139.
+(pdftex.def)             Requested size: 185.49173pt x 19.67336pt.
+<18.png, id=46, 453.695pt x 28.105pt>
+File: 18.png Graphic file (type png)
+<use 18.png>
+Package pdftex.def Info: 18.png  used on input line 145.
+(pdftex.def)             Requested size: 317.58434pt x 19.67336pt.
+<19.png, id=47, 453.695pt x 25.09375pt>
+File: 19.png Graphic file (type png)
+<use 19.png>
+Package pdftex.def Info: 19.png  used on input line 150.
+(pdftex.def)             Requested size: 317.58434pt x 17.56549pt.
+<sendp2.png, id=48, 496.85625pt x 36.135pt>
+File: sendp2.png Graphic file (type png)
+<use sendp2.png>
+Package pdftex.def Info: sendp2.png  used on input line 158.
+(pdftex.def)             Requested size: 198.73897pt x 14.45372pt.
+<wire2.png, id=49, 832.10875pt x 45.16875pt>
+File: wire2.png Graphic file (type png)
+<use wire2.png>
+Package pdftex.def Info: wire2.png  used on input line 164.
+(pdftex.def)             Requested size: 332.8376pt x 18.06717pt.
+ [4 <./11.png> <./12.png> <./13.png> <./14.png> <./15.png> <./16.png> <./17.png
+> <./18.png> <./19.png>]
+<sendp3.png, id=62, 539.01375pt x 426.59375pt>
+File: sendp3.png Graphic file (type png)
+<use sendp3.png>
+Package pdftex.def Info: sendp3.png  used on input line 172.
+(pdftex.def)             Requested size: 215.60167pt x 170.63446pt.
+<wire3.png, id=63, 1020.81375pt x 869.2475pt>
+File: wire3.png Graphic file (type png)
+<use wire3.png>
+Package pdftex.def Info: wire3.png  used on input line 178.
+(pdftex.def)             Requested size: 408.31827pt x 347.69284pt.
+ [5 <./sendp2.png> <./wire2.png> <./sendp3.png>]
+<arp_spoofing.png, id=70, 1284.8pt x 722.7pt>
+File: arp_spoofing.png Graphic file (type png)
+<use arp_spoofing.png>
+Package pdftex.def Info: arp_spoofing.png  used on input line 189.
+(pdftex.def)             Requested size: 513.9109pt x 289.07487pt.
+ [6 <./wire3.png>]
+<arpa.png, id=75, 829.0975pt x 375.4025pt>
+File: arpa.png Graphic file (type png)
+<use arpa.png>
+Package pdftex.def Info: arpa.png  used on input line 195.
+(pdftex.def)             Requested size: 331.63313pt x 150.15834pt.
+<target.png, id=76, 479.7925pt x 125.46875pt>
+File: target.png Graphic file (type png)
+<use target.png>
+Package pdftex.def Info: target.png  used on input line 202.
+(pdftex.def)             Requested size: 191.91359pt x 50.1866pt.
+<gateway.png, id=77, 471.7625pt x 57.21375pt>
+File: gateway.png Graphic file (type png)
+<use gateway.png>
+Package pdftex.def Info: gateway.png  used on input line 207.
+(pdftex.def)             Requested size: 188.70164pt x 22.88509pt.
+ [7 <./arp_spoofing.png> <./arpa.png>]
+<ett1.png, id=84, 777.90625pt x 684.5575pt>
+File: ett1.png Graphic file (type png)
+<use ett1.png>
+Package pdftex.def Info: ett1.png  used on input line 213.
+(pdftex.def)             Requested size: 311.15698pt x 273.81815pt.
+<wir2.png, id=85, 1537.745pt x 1130.2225pt>
+File: wir2.png Graphic file (type png)
+<use wir2.png>
+Package pdftex.def Info: wir2.png  used on input line 219.
+(pdftex.def)             Requested size: 430.56567pt x 316.46014pt.
+
+[8 <./target.png> <./gateway.png> <./ett1.png>]
+<full-net.png, id=92, 770.88pt x 715.67375pt>
+File: full-net.png Graphic file (type png)
+<use full-net.png>
+Package pdftex.def Info: full-net.png  used on input line 225.
+(pdftex.def)             Requested size: 269.81204pt x 250.48956pt.
+<filter.png, id=93, 869.2475pt x 252.945pt>
+File: filter.png Graphic file (type png)
+<use filter.png>
+Package pdftex.def Info: filter.png  used on input line 233.
+(pdftex.def)             Requested size: 347.69284pt x 101.17621pt.
+ [9 <./wir2.png> <./full-net.png>]
+<compile.png, id=99, 721.69624pt x 436.63126pt>
+File: compile.png Graphic file (type png)
+<use compile.png>
+Package pdftex.def Info: compile.png  used on input line 238.
+(pdftex.def)             Requested size: 288.67339pt x 174.6494pt.
+<cap.png, id=100, 963.6pt x 745.78625pt>
+File: cap.png Graphic file (type png)
+<use cap.png>
+Package pdftex.def Info: cap.png  used on input line 243.
+(pdftex.def)             Requested size: 385.43317pt x 298.30922pt.
+ [10 <./filter.png> <./compile.png>]
+<dns-poisoning.jpg, id=106, 578.16pt x 505.13719pt>
+File: dns-poisoning.jpg Graphic file (type jpg)
+<use dns-poisoning.jpg>
+Package pdftex.def Info: dns-poisoning.jpg  used on input line 254.
+(pdftex.def)             Requested size: 231.2599pt x 202.05128pt.
+ [11 <./cap.png>]
+<redirect.png, id=111, 775.89874pt x 594.22pt>
+File: redirect.png Graphic file (type png)
+<use redirect.png>
+Package pdftex.def Info: redirect.png  used on input line 260.
+(pdftex.def)             Requested size: 310.354pt x 237.68379pt.
+<dnsspoof.png, id=112, 940.51375pt x 569.12625pt>
+File: dnsspoof.png Graphic file (type png)
+<use dnsspoof.png>
+Package pdftex.def Info: dnsspoof.png  used on input line 266.
+(pdftex.def)             Requested size: 376.19884pt x 227.64647pt.
+
+Overfull \hbox (0.22998pt too wide) in paragraph at lines 263--268
+[]\OT1/cmr/m/n/12 Puis en lan^^Xcant et-ter-cap, toutes les ma-chines du r^^Ses
+eau seront redirig^^Sees vers 128.199.40.75 lorsqu'elles
+ []
+
+[12 <./dns-poisoning.jpg> <./redirect.png>]
+<arpspoof2.png, id=117, 594.22pt x 156.585pt>
+File: arpspoof2.png Graphic file (type png)
+<use arpspoof2.png>
+Package pdftex.def Info: arpspoof2.png  used on input line 274.
+(pdftex.def)             Requested size: 237.68379pt x 62.63287pt.
+<arpspoof.png, id=118, 607.26875pt x 156.585pt>
+File: arpspoof.png Graphic file (type png)
+<use arpspoof.png>
+Package pdftex.def Info: arpspoof.png  used on input line 279.
+(pdftex.def)             Requested size: 242.9032pt x 62.63287pt.
+<myspoofcode.png, id=119, 810.02625pt x 637.38126pt>
+File: myspoofcode.png Graphic file (type png)
+<use myspoofcode.png>
+Package pdftex.def Info: myspoofcode.png  used on input line 287.
+(pdftex.def)             Requested size: 324.00475pt x 254.94798pt.
+ [13 <./dnsspoof.png> <./arpspoof2.png> <./arpspoof.png>]
+<myspoof.png, id=127, 594.22pt x 156.585pt>
+File: myspoof.png Graphic file (type png)
+<use myspoof.png>
+Package pdftex.def Info: myspoof.png  used on input line 292.
+(pdftex.def)             Requested size: 415.95117pt x 109.60873pt.
+<myspoof2.png, id=128, 501.875pt x 100.375pt>
+File: myspoof2.png Graphic file (type png)
+<use myspoof2.png>
+Package pdftex.def Info: myspoof2.png  used on input line 297.
+(pdftex.def)             Requested size: 351.31009pt x 70.26201pt.
+ [14 <./myspoofcode.png> <./myspoof.png> <./myspoof2.png>] (./tp4.aux) ) 
+Here is how much of TeX's memory you used:
+ 3000 strings out of 480608
+ 50917 string characters out of 5903630
+ 465773 words of memory out of 5000000
+ 18835 multiletter control sequences out of 15000+600000
+ 535706 words of font info for 35 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 36i,7n,36p,595b,286s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/l
+ocal/texlive/2020/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/lo
+cal/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/loc
+al/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/loca
+l/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/
+texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/te
+xlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texl
+ive/2020/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on tp4.pdf (14 pages, 3568030 bytes).
+PDF statistics:
+ 157 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 206 words of extra memory for PDF output out of 10000 (max. 10000000)
+

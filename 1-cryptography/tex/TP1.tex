@@ -25,7 +25,7 @@ S'il n'est pas installé, l'installation peut-être faite sous Linux:
 apt-get install openssl
 \end{verbatim}
 
-\section{Chiffrer/déchiffrer}
+\section{Chiffrement symétrique}
 L'option -k permet de spécifier la clé de (dé)chiffrement, elle ba devenir obsolète donc il est préférable d'utiliser -pass. 
 L'option -K permet de donner le pass en hexadécimal. 
 L'option -kfile ou -passfile utilise la clé dans le fichier donné. 
@@ -80,5 +80,29 @@ AES 128 ecb: 3s\\
 12. De façon générale, CBC est plus lent que EBC. CBC est parallélisable alors qu'EBC non. \\
 
 13. L'option -K va permettre de récupérer une clé à partir d'un fichier, en utilisant une clé 36D1456C26A3670D et un IV FB22881684E1864D, le chiffrement marchera donc car l'algorithme ajoutera automatiquement du padding. 
+
+\section{Chiffrement asymétrique}
+1. Afin de générer une paire de clé publique/privée ((n/e) clé publique), ((n/d) clé privée), utilisable pour RSA (\(C^d mod P\)), nous pouvons utiliser les commandes:
+
+\begin{verbatim}
+openssl genrsa -out PrivateKeyTristan 2048
+\end{verbatim}
+
+\begin{verbatim}
+openssl rsa -in PrivateKeyTristan -pubout -out PublicKeyTristan
+\end{verbatim}
+Le chiffrement asymétrique est assez lent, le chiffrement symétrique est plus rapide, donc en pratique on utilise le chiffrement hybride. 
+Chiffrement asymétrique: on chiffre la clé par chiffrement asymétrique et le message en chiffrement symétrique. Example: fichier est chiffré en AES et on envoie la clé symétrique AES au destinataire via une méthode asymétrique type RSA afin qu'il récupère la clé et déchiffre le fichier. 
+
+Chiffrement
+\begin{verbatim}
+openssl rsautl -encrypt -pubin -inkey public.key -in plaintext.txt -out encrypted.txt
+\end{verbatim}
+
+Déchiffrement
+\begin{verbatim}
+déchiffrer: openssl rsautl -decrypt -inkey private.key -in encrypted.txt -out plaintext.txt
+\end{verbatim}
+
 \end{document} 
 
